@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Unsent Message</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 35%),
+    linear-gradient(135deg, #0f172a, #111827, #020617);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+}
+
+.phone {
+  width: 92%;
+  max-width: 420px;
+  height: 88vh;
+  max-height: 760px;
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 32px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  overflow: hidden;
+  position: relative;
+}
+
+.header {
+  padding: 20px;
+  background: rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f9a8d4, #c084fc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 3px;
+}
+
+.chat {
+  padding: 24px;
+  height: calc(100% - 82px);
+  overflow-y: auto;
+}
+
+.bubble {
+  max-width: 86%;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px 20px 20px 6px;
+  color: #e5e7eb;
+  line-height: 1.7;
+  font-size: 15px;
+  margin-bottom: 18px;
+  animation: fadeIn 0.7s ease forwards;
+}
+
+.draft {
+  color: #cbd5e1;
+}
+
+.button {
+  margin-top: 8px;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f9a8d4, #c084fc);
+  color: #111827;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(192, 132, 252, 0.25);
+  transition: 0.3s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(192, 132, 252, 0.4);
+}
+
+.typing {
+  display: none;
+  gap: 5px;
+  align-items: center;
+  width: fit-content;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  margin-bottom: 18px;
+}
+
+.typing span {
+  width: 7px;
+  height: 7px;
+  background: #cbd5e1;
+  border-radius: 50%;
+  animation: blink 1.2s infinite;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.message {
+  display: none;
+  white-space: pre-line;
+}
+
+.final-status {
+  display: none;
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: #bbf7d0;
+  line-height: 1.8;
+  animation: fadeIn 1s ease forwards;
+}
+
+.send-area {
+  display: none;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.send-btn {
+  padding: 13px 35px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  color: #64748b;
+  font-weight: 700;
+  cursor: not-allowed;
+}
+
+.note {
+  margin-top: 12px;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@keyframes blink {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .phone {
+    width: 94%;
+    height: 92vh;
+    border-radius: 26px;
+  }
+
+  .chat {
+    padding: 20px;
+  }
+
+  .bubble {
+    font-size: 14px;
+  }
+}
+.question-btn {
+  width: 54px;
+  height: 54px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f9a8d4, #c084fc);
+  color: #111827;
+  font-size: 26px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(192, 132, 252, 0.35);
+  transition: 0.3s ease;
+}
+
+.question-btn:hover {
+  transform: scale(1.08);
+}
+
+.video-box {
+  display: none;
+  margin-top: 18px;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.video-box video {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+  <div class="header">
+    <div class="avatar">✉️</div>
+    <div>
+      <div class="name">Unsent Message</div>
+      <div class="status" id="status">Draft saved • Never sent</div>
+    </div>
+  </div>
+
+  <div class="chat" id="chat">
+    <div class="bubble draft" id="intro">
+      There is one message I wrote but never sent(some of it).
+      <br><br>
+      This is defenitely a cringe message coming from me because i suck at essays.
+      <br>
+      <button class="button" onclick="openDraft()">Open Draft</button>
+    </div>
+
+    <div class="typing" id="typing">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="bubble message" id="message"></div>
+
+    <div class="final-status" id="finalStatus">
+      Draft Status<br><br>
+      ✓ Written<br>
+      ✓ Saved<br>
+      ✓ Finally Read<br><br>
+      Thank you.
+    </div>
+
+    <div class="send-area" id="sendArea">
+  <button class="question-btn" onclick="openVideo()">?</button>
+
+  <div class="note">
+    Some messages aren't meant to ask for something.<br>
+    They're just meant to be honest.
+  </div>
+
+  <div class="video-box" id="videoBox">
+    <video id="secretVideo" controls>
+      <source src="pikachu.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+  </div>
+</div>
+
+<script>
+const text = `To be honest,
+
+this wasn't supposed to be sent.
+
+In fact, if you're reading this, it means I finally tried to make a serious project for you .
+
+I've known you for about couple years now.
+
+Which is honestly a ridiculous amount of time to have a crush on someone and still barely talk to them(Graduation rajud).
+
+At this point, I'm pretty sure I've spent more time thinking of conversation starters than actually having conversations.
+
+I actually remember when it started.
+
+First year.
+
+One of your speeches.
+
+You said you don't even remember it.
+
+To you, it was likely just another presentation.
+
+To me, it accidentally became the beginning of a four-year secret(did not know it would last that long).
+
+
+I doubt you woke up that day thinking,
+"Today I'm accidentally going to become someone's crush."
+
+And somehow, without realizing it, you became someone I admired from a distance.
+
+Not in a creepy movie-villain way.
+
+More in a "wow, she's really amazing" kind of way.
+
+We've never talked that much.
+
+Which makes this even funnier.
+
+Most people develop feelings after getting to know someone.
+
+I somehow managed to do it while mostly observing from the sidelines for four years.
+Thank god without getting kickout sa scholarship even with 2 warnings and mentions from
+KCCFI Group chat.
+
+Not exactly my smartest achievement.
+
+But here we are.
+
+I know you're not perfect.
+
+Nobody is.
+
+But the things that make you human are also the things that make you easy to admire.
+
+You feel genuine.
+
+Real.
+
+And after all these years, I finally had to admit something.
+
+This crush has lasted longer than my poco and tecno phones, my friendships, and defenitely my chatgpt pro subscriptions.
+
+Honestly, I'm impressed with its durability.
+
+I'm not writing this because I expect anything.
+
+I'm not asking for an answer(defenitely not yet).
+
+I'm not secretly hiding a multiple-choice questionnaire or kagaguhan nasad at the bottom of this page(maybe?).
+
+I just felt like if I never told you, I'd probably regret it someday.
+
+So this is me finally being honest.
+
+For years, this stayed a secret.
+
+Today, it doesn't.
+
+And whether this changes anything or not,
+
+I'm genuinely glad I got the chance to know you.
+
+Even if it was mostly from a distance.`;
+
+function openDraft() {
+  const intro = document.getElementById("intro");
+  const typing = document.getElementById("typing");
+  const message = document.getElementById("message");
+  const status = document.getElementById("status");
+  const chat = document.getElementById("chat");
+
+  intro.style.display = "none";
+  typing.style.display = "flex";
+  status.textContent = "Typing...";
+
+  setTimeout(() => {
+    typing.style.display = "none";
+    message.style.display = "block";
+    typeText(text, message, 0);
+  }, 1800);
+}
+
+function typeText(text, element, index) {
+  const chat = document.getElementById("chat");
+
+  if (index < text.length) {
+    element.textContent += text.charAt(index);
+    chat.scrollTop = chat.scrollHeight;
+
+    let speed = 35;
+
+    if (text.charAt(index) === ".") speed = 280;
+    if (text.charAt(index) === ",") speed = 160;
+    if (text.charAt(index) === "\n") speed = 220;
+
+    setTimeout(() => typeText(text, element, index + 1), speed);
+  } else {
+    document.getElementById("status").textContent = "Draft opened";
+    setTimeout(showEnding, 1000);
+  }
+}
+
+function showEnding() {
+  const finalStatus = document.getElementById("finalStatus");
+  const sendArea = document.getElementById("sendArea");
+  const chat = document.getElementById("chat");
+
+  finalStatus.style.display = "block";
+
+  setTimeout(() => {
+    sendArea.style.display = "block";
+    chat.scrollTop = chat.scrollHeight;
+  }, 1000);
+}
+function openVideo() {
+  const videoBox = document.getElementById("videoBox");
+  const video = document.getElementById("secretVideo");
+  const chat = document.getElementById("chat");
+
+  videoBox.style.display = "block";
+  chat.scrollTop = chat.scrollHeight;
+  video.play();
+}
+</script>
+
+</body>
+</html>
